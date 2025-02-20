@@ -13,10 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TransactionsImport } from './routes/transactions'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
-import { Route as PostsIndexImport } from './routes/posts/index'
-import { Route as PostsPostIdImport } from './routes/posts/$postId'
 
 // Create Virtual Routes
 
@@ -30,6 +29,12 @@ const AboutLazyRoute = AboutLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
+const TransactionsRoute = TransactionsImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
@@ -39,18 +44,6 @@ const LoginRoute = LoginImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PostsIndexRoute = PostsIndexImport.update({
-  id: '/posts/',
-  path: '/posts/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PostsPostIdRoute = PostsPostIdImport.update({
-  id: '/posts/$postId',
-  path: '/posts/$postId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -72,25 +65,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/posts/$postId': {
-      id: '/posts/$postId'
-      path: '/posts/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof PostsPostIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/posts/': {
-      id: '/posts/'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof PostsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -101,51 +87,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/transactions': typeof TransactionsRoute
   '/about': typeof AboutLazyRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/posts': typeof PostsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/transactions': typeof TransactionsRoute
   '/about': typeof AboutLazyRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/posts': typeof PostsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/transactions': typeof TransactionsRoute
   '/about': typeof AboutLazyRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/posts/': typeof PostsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/about' | '/posts/$postId' | '/posts'
+  fullPaths: '/' | '/login' | '/transactions' | '/about'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/about' | '/posts/$postId' | '/posts'
-  id: '__root__' | '/' | '/login' | '/about' | '/posts/$postId' | '/posts/'
+  to: '/' | '/login' | '/transactions' | '/about'
+  id: '__root__' | '/' | '/login' | '/transactions' | '/about'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  TransactionsRoute: typeof TransactionsRoute
   AboutLazyRoute: typeof AboutLazyRoute
-  PostsPostIdRoute: typeof PostsPostIdRoute
-  PostsIndexRoute: typeof PostsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  TransactionsRoute: TransactionsRoute,
   AboutLazyRoute: AboutLazyRoute,
-  PostsPostIdRoute: PostsPostIdRoute,
-  PostsIndexRoute: PostsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -160,9 +141,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/about",
-        "/posts/$postId",
-        "/posts/"
+        "/transactions",
+        "/about"
       ]
     },
     "/": {
@@ -171,14 +151,11 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
+    "/transactions": {
+      "filePath": "transactions.tsx"
+    },
     "/about": {
       "filePath": "about.lazy.tsx"
-    },
-    "/posts/$postId": {
-      "filePath": "posts/$postId.tsx"
-    },
-    "/posts/": {
-      "filePath": "posts/index.tsx"
     }
   }
 }

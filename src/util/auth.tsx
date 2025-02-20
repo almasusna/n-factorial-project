@@ -9,3 +9,7 @@ export function signIn(token: string) {
 export function signOut() {
   localStorage.removeItem("token");
 }
+
+export function getToken() {
+  return localStorage.getItem("token");
+}
